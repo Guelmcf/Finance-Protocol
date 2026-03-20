@@ -1,0 +1,160 @@
+//prisma configuration
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(cuid())
+  name String
+  email String 
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  transactions Transaction[]
+  goals Goal[]
+  bills Bill[]
+  wishList WishList[]
+  budget Budget[]
+  budgetCategory budgetCategory[]
+
+}
+
+model Transaction {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  name String
+  type TransactionType
+  value Decimal @db.Decimal(10, 2)
+  categorie TransactionCategorie
+  date DateTime
+  note String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Goal{
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  name String
+  targetValue Decimal @db.Decimal(10, 2)
+  savedValue  Decimal @default(0) @db.Decimal(10, 2)
+  term DateTime
+  color String
+  icon String
+  note String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Bill{
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  name String
+  value Decimal @db.Decimal(10, 2)
+  dueDate DateTime
+  isRecurring Boolean @default(false)
+  totalInstallments Int?
+  paidInstallments Int @default(0)
+  note String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WishList {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  name String
+  value Decimal @db.Decimal(10, 2)
+  savedValue Decimal @default(0) @db.Decimal(10, 2)
+  priority PriorityList
+  categorie WishListCategorie
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Budget {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id])  
+  income Decimal @db.Decimal(10, 2)
+  montYear DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  budgetCategory BudgetCategory[]
+}
+
+model BudgetCategory {
+  id String @id @default(cuid())
+  budgetId String
+  budget Budget @relation(fields: [budgetId], references: [id])
+  budgetCategorie BudgetCategorie
+  budgetCategorieValue Decimal @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//enums
+
+enum TransactionType {
+  income
+  expense
+}
+
+enum TransactionCategorie {
+  health
+  investments
+  education
+  leisure
+  hobbys
+  food
+  transport
+  salary
+  freelancer
+}
+
+enum PriorityList {
+  low
+  medium
+  high
+  extreme
+}
+
+enum WishListCategorie {
+  leisure
+  clothing
+  gaming
+  hobbys
+  health
+  shoes
+  technology
+}
+
+enum BudgetCategorie {
+  leisure
+  clothing
+  gaming
+  hobbys
+  health
+  shoes
+  technology
+}
