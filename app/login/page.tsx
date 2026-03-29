@@ -13,6 +13,17 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const router = useRouter();
     const [passSee, setPassSee] = useState(false);
+    const [isEmailValid, setIsEmailValid] = useState(true);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValid = emailRegex.test(email)
+
+    function validateEmail() {
+        if (isValid) {
+            setIsEmailValid(true);
+        } else {
+            setIsEmailValid(false);
+        }
+    }
 
     async function handleLogin() {
         try{
@@ -51,7 +62,9 @@ export default function LoginPage() {
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    onBlur={validateEmail}
                 />
+                {!isEmailValid && <p className="text-red-500 text-sm mt-1">Please enter a valid email address.</p>}
                 <div className="relative flex items-center">
                 <input
                     className="
@@ -80,8 +93,8 @@ export default function LoginPage() {
                 active:bg-violet-800"
                 >Login
                 </button>
-                <h3 className="flex items-center justify-center text-center mt-5 mb-5">Não e um membro? 
-                <a href="/register" className="ml-2 underline hover:text-violet-800">inscreva-se agora</a>
+                <h3 className="flex items-center justify-center text-center mt-5 mb-5">Isn&apos;t a member? 
+                <a href="/register" className="ml-2 underline hover:text-violet-800">Sign up now</a>
             </h3>
             </form> 
             </div>
