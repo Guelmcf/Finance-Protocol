@@ -1,7 +1,7 @@
 import { createServerClient} from "@supabase/ssr"; //importa o cliente do supabase para o lado do servidor
 import { NextResponse, type NextRequest } from "next/server"; //importa o NextResponse e o tipo NextRequest do Next.js para lidar com as requisições e respostas
 
-export default async function proxy(request: NextRequest) { //exporta uma função middleware que recebe uma requisição do tipo NextRequest
+export async function proxy(request: NextRequest) { //exporta uma função middleware que recebe uma requisição do tipo NextRequest
  console.log("middleware rodando:", request.nextUrl.pathname);
 
  let supabaseResponse = NextResponse.next({ request }); //inicializa a resposta do middleware como a resposta padrão do Next.js
@@ -34,7 +34,11 @@ export default async function proxy(request: NextRequest) { //exporta uma funç�
    url.pathname = "/login";
    return NextResponse.redirect(url);
  }
-
+else if (user && (request.nextUrl.pathname.startsWith("/login") || request.nextUrl.pathname.startsWith("/register") || request.nextUrl.pathname === "/")) { //verifica se o usuário está autenticado e se a rota atual é a página de login ou cadastro
+   const url = request.nextUrl.clone();
+   url.pathname = "/dashboard";
+   return NextResponse.redirect(url);
+ }
  return supabaseResponse;
 }
 
