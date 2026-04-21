@@ -1,4 +1,4 @@
-  import { SideBarProvider } from "./components/sideBarProvider";
+  import { NavBarProvider } from "./components/navBarProvider";
 
 export default function AppLayout({
   children,
@@ -8,9 +8,9 @@ export default function AppLayout({
   return (
     <>
 
-      <SideBarProvider>
+      <NavBarProvider>
         {children}
-      </SideBarProvider>
+      </NavBarProvider>
     </>
   );
 }
