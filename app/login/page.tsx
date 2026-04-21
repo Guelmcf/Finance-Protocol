@@ -25,15 +25,15 @@ export default function LoginPage() {
         }
     }
 
-    async function handleLogin() {
-        try{
-            await createClient().auth.signInWithPassword({ email, password });
-            router.push("/dashboard");
-
-        } catch (error) {
-            console.error("Error logging in:", error);
+        async function handleLogin() {
+            try{
+                await createClient().auth.signInWithPassword({ email, password });
+                router.push("/dashboard");
+                
+            } catch (error) {
+                console.error("Error logging in:", error);
+            }
         }
-    }
 
     function handleChange() {
         setPassSee(!passSee);
